@@ -308,7 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // Take Photo Button
               ElevatedButton.icon(
-                onPressed: _isLoading ? null : _navigateToCamera,
+                onPressed: (_isLoading || !_isConnected) ? null : _navigateToCamera,
                 icon: _isLoading
                     ? Container(
                         width: 16,
@@ -319,12 +319,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       )
                     : const Icon(Icons.camera_alt),
-                label: const Text(
-                  'Take Photo',
-                  style: TextStyle(fontSize: 18),
+                label: Text(
+                  _isLoading ? 'Loading...' : 'Take Photo',
+                  style: const TextStyle(fontSize: 18),
                 ),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: _isConnected ? null : Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -335,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // Select from Gallery Button
               ElevatedButton.icon(
-                onPressed: _isLoading ? null : _pickFromGallery,
+                onPressed: (_isLoading || !_isConnected) ? null : _pickFromGallery,
                 icon: const Icon(Icons.photo_library),
                 label: const Text(
                   'Select from Gallery',
@@ -343,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.grey[600],
+                  backgroundColor: _isConnected ? Colors.grey[600] : Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

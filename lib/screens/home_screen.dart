@@ -13,8 +13,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final CameraService _cameraService = CameraService();
+  final ConnectivityService _connectivityService = ConnectivityService();
   bool _hasPermissions = false;
+  bool _isConnected = true;
   bool _isLoading = false;
+  StreamSubscription<ConnectivityStatus>? _connectivitySubscription;
 
   @override
   void initState() {

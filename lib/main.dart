@@ -4,9 +4,16 @@ import 'package:go_router/go_router.dart';
 import 'screens/home_screen.dart';
 import 'screens/camera_screen.dart';
 import 'screens/result_screen.dart';
+import 'services/connectivity_service.dart';
 
-void main() {
-  runApp(const ClarifAIApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize connectivity service
+  final connectivityService = ConnectivityService();
+  await connectivityService.startMonitoring();
+
+  runApp(ClarifAIApp(connectivityService: connectivityService));
 }
 
 class ClarifAIApp extends StatelessWidget {

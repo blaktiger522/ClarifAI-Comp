@@ -248,6 +248,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 48),
 
+              // Connectivity Status
+              if (!_isConnected)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.1),
+                    border: Border.all(color: Colors.red),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.wifi_off, color: Colors.red),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Text(
+                          'No internet connection',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _checkConnectivity,
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+
               // Permission Status
               if (!_hasPermissions)
                 Container(

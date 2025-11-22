@@ -16,8 +16,21 @@ void main() async {
   runApp(ClarifAIApp(connectivityService: connectivityService));
 }
 
-class ClarifAIApp extends StatelessWidget {
-  const ClarifAIApp({super.key});
+class ClarifAIApp extends StatefulWidget {
+  final ConnectivityService connectivityService;
+
+  const ClarifAIApp({super.key, required this.connectivityService});
+
+  @override
+  State<ClarifAIApp> createState() => _ClarifAIAppState();
+}
+
+class _ClarifAIAppState extends State<ClarifAIApp> {
+  @override
+  void dispose() {
+    widget.connectivityService.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

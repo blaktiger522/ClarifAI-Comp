@@ -105,15 +105,25 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _navigateToCamera() {
+  Future<void> _navigateToCamera() async {
+    if (!_isConnected) {
+      _showConnectivityError();
+      return;
+    }
+
     if (_hasPermissions) {
       context.go('/camera');
     } else {
-      _requestPermissions();
+      await _requestPermissions();
     }
   }
 
   Future<void> _pickFromGallery() async {
+    if (!_isConnected) {
+      _showConnectivityError();
+      return;
+    }
+
     if (!_hasPermissions) {
       await _requestPermissions();
       return;
@@ -141,6 +151,43 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       }
+    }
+  }
+
+  void _showConnectivityError() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('No Internet Connection'),
+          content: const Text(
+            'ClarifAI requires an internet connection to process images. Please check your connection and try again.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _checkConnectivity();
+              },
+              child: const Text('Retry'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _checkConnectivity() async {
+    final isConnected = await _connectivityService.waitForConnection(
+      timeout: const Duration(seconds: 10),
+    );
+
+    if (!isConnected && mounted) {
+      _showConnectivityError();
     }
   }
 

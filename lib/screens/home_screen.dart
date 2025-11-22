@@ -23,6 +23,25 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _checkPermissions();
+    _setupConnectivityMonitoring();
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription?.cancel();
+    super.dispose();
+  }
+
+  void _setupConnectivityMonitoring() {
+    _connectivitySubscription = _connectivityService.connectivityStream.listen(
+      (status) {
+        if (mounted) {
+          setState(() {
+            _isConnected = status.isConnected;
+          });
+        }
+      },
+    );
   }
 
   Future<void> _checkPermissions() async {
